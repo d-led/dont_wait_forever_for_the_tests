@@ -1,14 +1,17 @@
 apply plugin: 'groovy'
 
+import org.gradle.logging.StyledTextOutputFactory
+import static org.gradle.logging.StyledTextOutput.Style
+
 repositories {
     jcenter()
 }
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.4'
+    compile 'com.netflix.rxjava:rxjava-groovy:0.20.7'
 
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
-    testCompile 'com.netflix.rxjava:rxjava-groovy:0.20.7'
     testCompile 'junit:junit:4.12'
 }
 
@@ -16,7 +19,19 @@ test {
     testLogging {
         exceptionFormat "full"
     }
+
+    afterTest { descr, result ->
+    	def elapsed = result.endTime - result.startTime
+    	def out = services.get(StyledTextOutputFactory).create("colored-test-output")
+    	out.withStyle(Style.Info).
+    		println ("$descr.className takes $elapsed ms.")
+    }
 }
 
+task oldTest (dependsOn: 'classes', type: JavaExec) {
+	description 'obsolescence by waiting'
+    main = 'WaitSome'
+    classpath = sourceSets.main.runtimeClasspath
+}
 
-defaultTasks 'test'
+defaultTasks 'test', 'oldTest'
