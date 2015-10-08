@@ -28,10 +28,10 @@ test {
     }
 }
 
-task oldTest (dependsOn: 'classes', type: JavaExec) {
+task oldNonTest (dependsOn: 'classes', type: JavaExec) {
 	description 'obsolescence by waiting'
     main = 'WaitSome'
     classpath = sourceSets.main.runtimeClasspath
 }
 
-defaultTasks 'test', 'oldTest'
+defaultTasks 'test', 'oldNonTest'
