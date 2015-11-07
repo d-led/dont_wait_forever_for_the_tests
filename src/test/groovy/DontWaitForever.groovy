@@ -13,7 +13,7 @@ class DontWaitForever extends Specification {
         	def done = false
 
         when:
-        	observable.subscribe{ _ ->
+        	observable.subscribe {
         		done = true
         	}
 
