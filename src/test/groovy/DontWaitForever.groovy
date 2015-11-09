@@ -28,4 +28,28 @@ class DontWaitForever extends Specification {
         then:
             done == true
     }
+
+    def "ticking some"() {
+        given:
+            def scheduler = new TestScheduler()
+            def hundred_days_passed = Observable.just(1).delay(100, TimeUnit.DAYS, scheduler)
+            def i = 1
+        
+        when:
+            def observable = Observable
+                .interval(1, TimeUnit.SECONDS, scheduler)
+                .takeUntil(hundred_days_passed)
+
+        and:
+            observable.subscribe{
+                i++
+            }
+
+        and:
+            scheduler.advanceTimeBy 100, TimeUnit.DAYS
+
+        then:
+
+            i == 60*60*24*100
+    }
 }
