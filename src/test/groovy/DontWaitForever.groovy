@@ -49,7 +49,6 @@ class DontWaitForever extends Specification {
             scheduler.advanceTimeBy 100, TimeUnit.DAYS
 
         then:
-
             i == 60*60*24*100
     }
 }
