@@ -11,7 +11,9 @@ class DontWaitForever extends Specification {
             def scheduler = new TestScheduler()
 
             // system under test: will tick once after a hundred days
-            def observable = Observable.just(1).delay(100, TimeUnit.DAYS, scheduler)
+            def observable = Observable.just(1)
+                .delay(100, TimeUnit.DAYS, scheduler)
+                .delay(1,   TimeUnit.SECONDS, scheduler)
             def done = false
 
         when:
