@@ -24,6 +24,7 @@ class DontWaitForever extends Specification {
 
         and:
             scheduler.advanceTimeBy 100, TimeUnit.DAYS
+            scheduler.advanceTimeBy 0.5, TimeUnit.SECONDS
 
         then:
             done == true
@@ -33,7 +34,7 @@ class DontWaitForever extends Specification {
         given:
             def scheduler = new TestScheduler()
             def hundred_days_passed = Observable.just(1).delay(100, TimeUnit.DAYS, scheduler)
-            def i = 1
+            def i = 0
         
         when:
             def observable = Observable
