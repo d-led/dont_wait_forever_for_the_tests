@@ -24,7 +24,7 @@ class DontWaitForever extends Specification {
 
         and:
             scheduler.advanceTimeBy 100, TimeUnit.DAYS
-            scheduler.advanceTimeBy 0.5, TimeUnit.SECONDS
+            scheduler.advanceTimeBy 1, TimeUnit.SECONDS
 
         then:
             done == true
