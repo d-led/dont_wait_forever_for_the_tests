@@ -11,9 +11,10 @@ class DontWaitForever extends Specification {
             def scheduler = new TestScheduler()
 
             // system under test: will tick once after a hundred days
-            def observable = Observable.just(1)
+            def observable = Observable
+                .just(1)
                 .delay(100, TimeUnit.DAYS, scheduler)
-                .delay(1,   TimeUnit.SECONDS, scheduler)
+            
             def done = false
 
         when:
@@ -26,7 +27,6 @@ class DontWaitForever extends Specification {
 
         and:
             scheduler.advanceTimeBy 100, TimeUnit.DAYS
-            scheduler.advanceTimeBy 1, TimeUnit.SECONDS
 
         then:
             done == true
@@ -35,13 +35,16 @@ class DontWaitForever extends Specification {
     def "ticking some"() {
         given:
             def scheduler = new TestScheduler()
-            def hundred_days_passed = Observable.just(1).delay(100, TimeUnit.DAYS, scheduler)
+            def hundred_days_and_a_second_passed = Observable
+                .just(1)
+                .delay(100, TimeUnit.DAYS, scheduler)
+                .delay(1  , TimeUnit.SECONDS, scheduler)
             def i = 0
         
         when:
             def observable = Observable
                 .interval(1, TimeUnit.SECONDS, scheduler)
-                .takeUntil(hundred_days_passed)
+                .takeUntil(hundred_days_and_a_second_passed)
 
         and:
             observable.subscribe{
