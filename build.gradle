@@ -24,9 +24,11 @@ test {
     	def elapsed = result.endTime - result.startTime
     	def out = services.get(StyledTextOutputFactory).create("colored-test-output")
     	out.withStyle(Style.Info).
-    		println ("$descr.className takes $elapsed ms.")
+    		println ("$descr takes $elapsed ms.")
     }
 }
+
+test.outputs.upToDateWhen {false}
 
 task oldNonTest (dependsOn: 'classes', type: JavaExec) {
 	description 'obsolescence by waiting'
