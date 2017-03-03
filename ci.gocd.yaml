@@ -13,6 +13,7 @@ pipelines:
             unit:
               run_instances: all
               resources:
+                - gradle
                 - java
               tasks:
                - exec:
