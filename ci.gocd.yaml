@@ -11,6 +11,7 @@ pipelines:
           clean_workspace: true
           jobs:
             unit:
+              run_instances: all
               resources:
                 - java
               tasks:
