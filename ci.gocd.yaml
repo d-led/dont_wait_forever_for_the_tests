@@ -1,0 +1,23 @@
+pipelines:
+  dont_wait_forever_for_the_tests:
+    group: defaultGroup
+    locking: off
+    materials:
+      main_repo:
+        git: https://github.com/d-led/dont_wait_forever_for_the_tests.git
+        branch: master
+    stages:
+      - test:
+          clean_workspace: true
+          jobs:
+            unit:
+              resources:
+                - java
+              tasks:
+               - exec:
+                   command: chmod
+                   arguments:
+                     - +x
+                     - gradlew
+               - exec:
+                   command: ./gradlew

@@ -1,7 +1,6 @@
 apply plugin: 'groovy'
 
 import org.gradle.logging.StyledTextOutputFactory
-import static org.gradle.logging.StyledTextOutput.Style
 
 repositories {
     jcenter()
@@ -22,9 +21,7 @@ test {
 
     afterTest { descr, result ->
     	def elapsed = result.endTime - result.startTime
-    	def out = services.get(StyledTextOutputFactory).create("colored-test-output")
-    	out.withStyle(Style.Info).
-    		println ("$descr takes $elapsed ms.")
+		println ("$descr takes $elapsed ms.")
     }
 }
 
