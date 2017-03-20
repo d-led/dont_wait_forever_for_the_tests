@@ -23,3 +23,5 @@ pipelines:
                      - gradlew
                - exec:
                    command: ./gradlew
+                   arguments:
+                    - --no-daemon
