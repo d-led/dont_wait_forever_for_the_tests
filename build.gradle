@@ -1,36 +1,42 @@
-apply plugin: 'groovy'
-
-import org.gradle.logging.StyledTextOutputFactory
+plugins {
+    id 'groovy'
+}
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.4'
-    compile 'com.netflix.rxjava:rxjava-groovy:0.20.7'
+    // https://mvnrepository.com/artifact/org.apache.groovy/groovy-all
+    implementation("org.apache.groovy:groovy-all:4.0.26")
+    // https://mvnrepository.com/artifact/io.reactivex.rxjava3/rxjava
+    implementation("io.reactivex.rxjava3:rxjava:3.1.10")
 
-    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
-    testCompile 'junit:junit:4.12'
+    // https://mvnrepository.com/artifact/org.spockframework/spock-core
+    testImplementation("org.spockframework:spock-core:2.4-M6-groovy-4.0")
+    // https://mvnrepository.com/artifact/junit/junit
+    testImplementation("junit:junit:4.13.2")
 }
 
-test {
+tasks.test {
+    useJUnitPlatform()
+
     testLogging {
-        exceptionFormat "full"
+        exceptionFormat = 'full'
     }
 
-    afterTest { descr, result ->
-    	def elapsed = result.endTime - result.startTime
-		println ("$descr takes $elapsed ms.")
+    afterTest { descriptor, result ->
+        def elapsed = result.endTime - result.startTime
+        println("${descriptor.name} takes ${elapsed} ms.")
     }
+    outputs.upToDateWhen { false }
 }
 
-test.outputs.upToDateWhen {false}
-
-task oldNonTest (dependsOn: 'classes', type: JavaExec) {
-	description 'obsolescence by waiting'
-    main = 'WaitSome'
+tasks.register('oldNonTest', JavaExec) {
+    description = 'obsolescence by waiting'
+    group = 'application'
+    mainClass = 'WaitSome'
     classpath = sourceSets.main.runtimeClasspath
 }
 
-defaultTasks 'test', 'oldNonTest'
+defaultTasks('test', 'oldNonTest')

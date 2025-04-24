@@ -1,9 +1,8 @@
 import spock.lang.Specification
 
-import rx.Observable
-import rx.schedulers.TestScheduler
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.TestScheduler
 import java.util.concurrent.TimeUnit
-
 
 class DontWaitForever extends Specification {
     def "why wait?"() {
@@ -26,7 +25,7 @@ class DontWaitForever extends Specification {
             done == false
 
         and:
-            scheduler.advanceTimeBy 100, TimeUnit.DAYS
+            scheduler.advanceTimeBy(100, TimeUnit.DAYS)
 
         then:
             done == true
@@ -35,32 +34,32 @@ class DontWaitForever extends Specification {
     def "ticking some"() {
         given:
             def scheduler = new TestScheduler()
-            def hundred_days_and_a_second_passed = Observable
+            def hundredDaysAndASecondPassed = Observable
                 .just(1)
                 .delay(100, TimeUnit.DAYS, scheduler)
-                .delay(1  , TimeUnit.SECONDS, scheduler)
+                .delay(1, TimeUnit.SECONDS, scheduler)
             def i = 0
         
         when:
             def observable = Observable
                 .interval(1, TimeUnit.SECONDS, scheduler)
-                .takeUntil(hundred_days_and_a_second_passed)
+                .takeUntil(hundredDaysAndASecondPassed)
 
         and:
-            observable.subscribe{
+            observable.subscribe {
                 i++
             }
 
         and:
-            scheduler.advanceTimeBy 100, TimeUnit.DAYS
+            scheduler.advanceTimeBy(100, TimeUnit.DAYS)
 
         then:
-            i == 60*60*24*100
+            i == 60 * 60 * 24 * 100
 
         and:
-            scheduler.advanceTimeBy 100, TimeUnit.DAYS
+            scheduler.advanceTimeBy(1, TimeUnit.SECONDS)
 
         then:
-            i == 60*60*24*100
+            i == 60 * 60 * 24 * 100
     }
 }
