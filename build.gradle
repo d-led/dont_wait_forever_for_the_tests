@@ -8,14 +8,14 @@ repositories {
 
 dependencies {
     // https://mvnrepository.com/artifact/org.apache.groovy/groovy-all
-    implementation("org.apache.groovy:groovy-all:4.0.26")
+    implementation("org.apache.groovy:groovy-all:5.0.6")
     // https://mvnrepository.com/artifact/io.reactivex.rxjava3/rxjava
-    implementation("io.reactivex.rxjava3:rxjava:3.1.10")
+    implementation("io.reactivex.rxjava3:rxjava:3.1.12")
 
     // https://mvnrepository.com/artifact/org.spockframework/spock-core
-    testImplementation("org.spockframework:spock-core:2.4-M6-groovy-4.0")
-    // https://mvnrepository.com/artifact/junit/junit
-    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.spockframework:spock-core:2.4-groovy-5.0")
+    // Source: https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.3")
 }
 
 tasks.test {
@@ -25,10 +25,22 @@ tasks.test {
         exceptionFormat = 'full'
     }
 
-    afterTest { descriptor, result ->
-        def elapsed = result.endTime - result.startTime
-        println("${descriptor.name} takes ${elapsed} ms.")
-    }
+    addTestListener(new org.gradle.api.tasks.testing.TestListener() {
+        @Override
+        void beforeSuite(org.gradle.api.tasks.testing.TestDescriptor suite) {}
+
+        @Override
+        void afterSuite(org.gradle.api.tasks.testing.TestDescriptor suite, org.gradle.api.tasks.testing.TestResult result) {}
+
+        @Override
+        void beforeTest(org.gradle.api.tasks.testing.TestDescriptor testDescriptor) {}
+
+        @Override
+        void afterTest(org.gradle.api.tasks.testing.TestDescriptor testDescriptor, org.gradle.api.tasks.testing.TestResult result) {
+            def elapsed = result.endTime - result.startTime
+            println("${testDescriptor.name} takes ${elapsed} ms.")
+        }
+    })
     outputs.upToDateWhen { false }
 }
 
