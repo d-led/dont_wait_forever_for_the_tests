@@ -26,4 +26,4 @@ pipelines:
                - exec:
                    command: ./gradlew
                    arguments:
-                    - --no-daemon
+                    - --no-daemon                - test
